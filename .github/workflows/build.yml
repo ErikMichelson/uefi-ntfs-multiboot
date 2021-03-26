@@ -1,0 +1,24 @@
+name: build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Builds UEFI:NTFS multiboot with MinGW for ${{ matrix.arch }}
+    strategy:
+      matrix:
+        arch: ['x64', 'ia32']
+    steps:
+      - name: Set up MinGW
+        uses: egor-tensin/setup-mingw@v2
+        with:
+          platform: x64
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Run make
+        run: make TARGET=${{ matrix.arch }}  
